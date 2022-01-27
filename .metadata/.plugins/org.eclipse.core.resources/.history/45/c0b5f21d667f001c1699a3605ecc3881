@@ -1,0 +1,80 @@
+package clientservermodel;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+
+
+public class Client{
+	
+	private Socket socket;
+	protected BufferedReader in = null;
+	protected PrintWriter out = null;
+	public int clientport;
+	private String name;
+	
+	//0 = guest(default),1 = manager
+	//private int access = 0;
+	
+	public Client(String hostname,int port,String name){
+		try{
+			 this.socket = new Socket(hostname, port);
+		     out = new PrintWriter(socket.getOutputStream(), true);
+		     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		     this.clientport = socket.getLocalPort();
+		     this.name = name;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+public static void main(String[] args) throws UnknownHostException, IOException {
+		
+	    int access = 0;//default is guest
+		Scanner sc = new Scanner(System.in);
+		String str = null;
+		
+		
+		
+		
+			
+		Client cl = new Client("localhost",5555,"Bhaswata");
+		while(true) {
+			System.out.println("Press m with password [m<blank>password] for manager access, press g for guest access : ");
+			System.out.print("$ ");
+			str = sc.nextLine();
+			//System.out.print(str);
+			if(str.equals("g")) {
+				continue;
+			}
+			else if(str.charAt(0)=='m') {
+			cl.out.println("rqstpassword");
+			cl.out.flush();
+			String temp = cl.in.readLine();
+			if(temp.equals(str)) {
+				System.out.println("Manager Access Granted");
+				break;
+			}
+			else {
+					System.out.println("Try again");
+				}
+		}
+		}
+	
+		
+		while(!"exit".equalsIgnoreCase(str)) {
+			
+		}
+		
+		sc.close();
+		
+
+	}
+
+}

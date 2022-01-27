@@ -1,0 +1,81 @@
+package clientservermodel;
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+
+public class Server implements Runnable{
+	
+	public HashMap<Integer,HashMap<String,String>> database = new HashMap<Integer,HashMap<String,String>>();
+	private static ServerSocket s;
+	private Socket socket;
+	protected BufferedReader in = null;
+	protected PrintWriter out = null;
+	
+	private static String password = "abc";
+	
+	public Server(Socket socket) throws IOException{
+		this.socket = socket;
+		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		out = new PrintWriter(socket.getOutputStream(),true);
+	}
+	
+	private static String sendManagerPassword() {
+		return new String(password);
+	}
+
+	@Override
+	public void run() {
+				
+			String str = null;
+			
+			try {
+				while((str = in.readLine())!=null) {
+					if(str.equals("rqstpassword")){
+						System.out.println("Reached Here");
+						out.println(sendManagerPassword());
+						System.out.println("Reached Here");
+					}
+				}
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+			finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (in != null) {
+                        in.close();
+                        socket.close();
+                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+			}
+			
+		
+	}
+
+	
+	public static void main(String[] args) throws IOException {
+		 s = new ServerSocket(5555);
+		 System.out.println("Server is live");
+		 while(true) {
+			 Socket socket =  s.accept();
+			 System.out.println("Client accepted");
+			 Server server = new Server(socket);
+	         Thread thread = new Thread(server);
+	         thread.start();
+	         
+		 }
+	}
+}
