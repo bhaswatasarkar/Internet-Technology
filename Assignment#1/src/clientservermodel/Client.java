@@ -41,19 +41,19 @@ public class Client{
 		System.out.print("$ Enter username : ");
 		this.username = sc.nextLine();
 		while(true) {
-			System.out.println("Press m with password [m<blank>password] for manager access, press g for guest access : ");
-			System.out.print("$ ");
+			System.out.println("$ Press m with password [m<blank>password] for manager access, press g for guest access : ");
+			
 			str = sc.nextLine();
 			
 			if(str.charAt(0)=='g') {
 				System.out.println("Entering as guest");
-				this.out.println("guestentry "+str);
+				this.out.println("guestentry "+this.username+" "+str);
 				this.out.flush();
 				break;
 			}
 			
 			else if(str.charAt(0)=='m') {
-				this.out.println("rqstpassword "+str);//manager password
+				this.out.println("rqstpassword "+this.username+" "+str);//manager password
 				this.out.flush();
 				String temp = this.in.readLine();
 				if(temp.equals("access granted")) {
@@ -83,11 +83,24 @@ public static void main(String[] args) throws UnknownHostException, IOException 
 		
 		cl.checkAccess();
 		
-		while(!"exit".equalsIgnoreCase(str)) {
+		while(true) {
+			System.out.print("$ ");
+			str = sc.nextLine();
+			if("exit".equalsIgnoreCase(str)) {
+				System.out.print("logging out..");
+				sc.close();
+				break;
+			}
+			cl.out.println(str);
+			cl.out.flush();
 			
+			str = cl.in.readLine();
+			if(str!=null){
+				System.out.println(str);
+			}
 		}
 		
-		sc.close();
+		
 		
 
 	}

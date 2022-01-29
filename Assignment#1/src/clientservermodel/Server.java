@@ -8,16 +8,21 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Server implements Runnable{
 	
-	//Containing all key value pair wrt their username HashMap<username,HashMap<String,String>>
+	//Containing all key value pair wrt their username HashMap<username,HashMap<String,String>>[inner hasmap is hm]
 	public static HashMap<String,HashMap<String,String>> database = new HashMap<String,HashMap<String,String>>();
 	
 	//list of clients who have manager access and who haven't [HashMap<username,1/0>] 1 = manager, 0 = guest
 	public static HashMap<String,Integer> accesslist = new HashMap<String,Integer>();
+	
+	//Hashmap for the parricular user
+	public HashMap<String,String> hm = new HashMap<String,String>();
 	
 	private static ServerSocket s;
 	private Socket socket;
@@ -32,14 +37,31 @@ public class Server implements Runnable{
 		out = new PrintWriter(socket.getOutputStream(),true);
 	}
 	
-	private void handleManagerAccess(String username) {
+	
+	
+	private void handleManagerAccess(String username,String password) {
 		Scanner sc = new Scanner(System.in);
-		if(accesslist.containsKey(username)) {
-			if(accesslist.get(username)==1) {
-				System.out.println("Welcome back "+username);
-				out.println("access granted");
+		if(password.equals(PASSWORD)) {
+			if(accesslist.containsKey(username)) {
+				if(accesslist.get(username)==1) {
+					System.out.println("Welcome back "+username);
+					out.println("access granted");
+				}
+				else if(accesslist.get(username)==0) {
+					System.out.println(username+" requesting manager access Y/y to access, anything else to reject");
+					String temp = sc.nextLine();
+					if(temp.equals("y")||temp.equals("Y")) {
+						accesslist.put(username, 1);
+						System.out.println("Welcome back "+username);
+						out.println("access granted");
+					}
+					else {
+						out.println("access denied");
+					}
+				}
 			}
-			else if(accesslist.get(username)==0) {
+			//creating new manager user
+			else {
 				System.out.println(username+" requesting manager access Y/y to access, anything else to reject");
 				String temp = sc.nextLine();
 				if(temp.equals("y")||temp.equals("Y")) {
@@ -51,19 +73,13 @@ public class Server implements Runnable{
 				}
 			}
 		}
-		//creating new manager user
 		else {
-			System.out.println(username+" requesting manager access Y/y to access, anything else to reject");
-			String temp = sc.nextLine();
-			if(temp.equals("y")||temp.equals("Y")) {
-				accesslist.put(username, 1);
-				out.println("access granted");
-			}
-			else {
-				out.println("access denied");
-			}
+			out.println("wrong password");
 		}
 	}
+	
+	
+	
 	
 	private void handleGuestAccess(String username) {
 		if(!accesslist.containsKey(username)) {
@@ -73,30 +89,79 @@ public class Server implements Runnable{
 			System.out.println("Welcome back "+username);
 		}
 	}
+	
+	
+	private void handleDatabase(String username,String[] arr) {
+		int i = 0;
+		String temp = "";
+		while(i<arr.length) {
+			if(arr[i].equals("put")) {
+				hm.put(arr[i+1], arr[i+2]);
+				i = i + 3;	
+			}
+			else if (arr[i].equals("get")){
+				if(accesslist.get(username) == 1) {
+					for(String key : database.keySet()) {
+						if(database.get(key).containsKey(arr[i+1])) {
+							temp = temp + new String(database.get(key).get(arr[i+1]))+" ";
+						}
+						else {
+							temp = "No data found here";
+						}
+					}
+					
+				}
+				else {
+					if(database.get(username).containsKey(arr[i+1])) {
+						temp = temp + database.get(username).get(arr[i+1])+" ";
+					}
+					else {
+						temp = "No data found";
+					}
+				}
+				i = i + 2;
+			}
+			else {
+				System.out.println("Invalid Input!");
+				return;
+			}
+			
+		}
+			database.put(username, hm);
+			out.println(temp.stripTrailing());
+			out.flush();
+		
+	}
 
 	@Override
 	public void run() {
 				
 			String str = null;
-			
+			String clientusername = null;
 			try {
 				while((str = in.readLine())!=null) {
 					String[] arr = str.split(" ");
 					switch(arr[0]){
 						case "rqstpassword":
-							handleManagerAccess(arr[2]);
+							clientusername = arr[1];
+							handleManagerAccess(clientusername,arr[3]);
 							break;
 						case "guestentry":
-							handleGuestAccess(arr[1]);
+							clientusername = arr[1];
+							handleGuestAccess(clientusername);
+							break;
+						case "get": case "put":
+							handleDatabase(clientusername,arr);
 							break;
 						default:
-							System.out.println("Something went wrong!");  
+							System.out.println("Invalid input!");
+							out.println("Invalid input!");
 							break;
 					}
 				}
 			} catch (IOException e) {
 				
-				e.printStackTrace();
+				System.out.println("Client Disconnected!");
 			}
 			finally {
                 try {
@@ -118,15 +183,21 @@ public class Server implements Runnable{
 
 	
 	public static void main(String[] args) throws IOException {
+		
 		 s = new ServerSocket(5555);
 		 System.out.println("Server is live");
 		 while(true) {
-			 Socket socket =  s.accept();
-			 System.out.println("Client accepted");
-			 Server server = new Server(socket);
-	         Thread thread = new Thread(server);
-	         thread.start();
-	         
-		 }
+			 
+				 Socket socket =  s.accept();
+				 System.out.println("Client accepted");
+				 Server server = new Server(socket);
+		         Thread thread = new Thread(server);
+		         thread.start();
+			 
+			 
+		 	}
+		
+		
 	}
+	
 }
