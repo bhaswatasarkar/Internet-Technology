@@ -21,7 +21,8 @@ public class Server implements Runnable{
 	//list of clients who have manager access and who haven't [HashMap<username,1/0>] 1 = manager, 0 = guest
 	public static HashMap<String,Integer> accesslist = new HashMap<String,Integer>();
 	
-	//Hashmap for the parricular user
+	
+	//HashMap for the particular user
 	public HashMap<String,String> hm = new HashMap<String,String>();
 	
 	private static ServerSocket s;
@@ -80,7 +81,6 @@ public class Server implements Runnable{
 	
 	
 	
-	
 	private void handleGuestAccess(String username) {
 		if(!accesslist.containsKey(username)) {
 			accesslist.put(username, 0);
@@ -91,38 +91,36 @@ public class Server implements Runnable{
 	}
 	
 	
+	
 	private void handleDatabase(String username,String[] arr) {
 		int i = 0;
 		String temp = "";
 		while(i<arr.length) {
+			
 			if(arr[i].equals("put")) {
 				hm.put(arr[i+1], arr[i+2]);
 				i = i + 3;	
 			}
+			
 			else if (arr[i].equals("get")){
 				if(accesslist.get(username) == 1) {
 					for(String key : database.keySet()) {
 						if(database.get(key).containsKey(arr[i+1])) {
 							temp = temp + new String(database.get(key).get(arr[i+1]))+" ";
-						}
-						else {
-							temp = "No data found here";
-						}
-					}
-					
+						}	
+					}	
 				}
 				else {
 					if(database.get(username).containsKey(arr[i+1])) {
 						temp = temp + database.get(username).get(arr[i+1])+" ";
 					}
-					else {
-						temp = "No data found";
-					}
 				}
 				i = i + 2;
 			}
+			
 			else {
 				System.out.println("Invalid Input!");
+				out.println("Invalid input!");
 				return;
 			}
 			
@@ -132,6 +130,8 @@ public class Server implements Runnable{
 			out.flush();
 		
 	}
+	
+	
 
 	@Override
 	public void run() {
@@ -153,10 +153,14 @@ public class Server implements Runnable{
 						case "get": case "put":
 							handleDatabase(clientusername,arr);
 							break;
+						case "#####maintain#####":
+							maintain();
+							break;
 						default:
 							System.out.println("Invalid input!");
 							out.println("Invalid input!");
 							break;
+					
 					}
 				}
 			} catch (IOException e) {
@@ -180,6 +184,29 @@ public class Server implements Runnable{
 			
 		
 	}
+	
+	public static void maintain() {
+		Scanner sc = new Scanner(System.in);
+		String str = new String();
+		System.out.println("Want to remove everyone from manager access?");
+		str = sc.nextLine();
+		if(str.equals("y")||str.equals("Y")) {
+			for(String key : database.keySet()) {
+				accesslist.put(key, 0);
+			}
+			return;
+		}
+		while(true) {
+			System.out.println("Want to remove someone from manager access?");
+			str = sc.nextLine();
+			if(accesslist.containsKey(str)) {
+				accesslist.put(str, 0);
+			}
+			else
+				break;
+		}
+		System.out.println("Maintainence completed");
+	}
 
 	
 	public static void main(String[] args) throws IOException {
@@ -187,17 +214,11 @@ public class Server implements Runnable{
 		 s = new ServerSocket(5555);
 		 System.out.println("Server is live");
 		 while(true) {
-			 
 				 Socket socket =  s.accept();
-				 System.out.println("Client accepted");
+				 System.out.println("Client accepted (at port : "+socket.getPort()+")");
 				 Server server = new Server(socket);
 		         Thread thread = new Thread(server);
 		         thread.start();
-			 
-			 
 		 	}
-		
-		
 	}
-	
 }

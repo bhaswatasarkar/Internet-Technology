@@ -1,0 +1,9 @@
+package clientservermodel;
+
+public class ServerMaintenance{
+
+	public static void main(String[] args) {
+		System.out.println(Server.accesslist);
+	}
+
+}

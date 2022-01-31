@@ -97,7 +97,7 @@ public static void main(String[] args) throws UnknownHostException, IOException 
 			str = cl.in.readLine();
 			if(str!=null){
 				System.out.println(str);
-			}
+			}//else "no data found"
 		}
 		
 		
