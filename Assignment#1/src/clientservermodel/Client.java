@@ -79,7 +79,8 @@ public static void main(String[] args) throws UnknownHostException, IOException 
 		Scanner sc = new Scanner(System.in);
 		String str = null;
 	
-		Client cl = new Client("localhost",5555);
+		//Client cl = new Client("localhost",5555);
+		Client cl = new Client(args[0],Integer.parseInt(args[1]));
 		
 		cl.checkAccess();
 		
