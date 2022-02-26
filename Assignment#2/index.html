@@ -8,77 +8,67 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <title>Chatting page</title>
-    <link rel="stylesheet" href="index.css">
-    <script defer src ="http://localhost:8000/socket.io/socket.io.js"></script>
-    <script defer src="client.js"></script>
+    <title>Hello, world!</title>
   </head>
   <body>
-    <h1>Welcome to my chatting website!</h1>
 
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-          <form class="d-flex" id="send-container">
-            <input class="form-control me-2" type="text" aria-label="Send" id="messageInp">
-            <button class="btn btn-outline-success" type="submit" id="broadcastbutton">Send Broadcast</button>
-          </form>
-        </div>
-    </nav>
+<form class="row g-3 needs-validation" id="index-form" action = "chat.html">
+  <div class="col-md-4">
+    <label for="validationCustom01" class="form-label">Enter your name</label>
+    <input type="text" class="form-control" id="validationCustom01"  name="username" value="" required>
+    <div class="valid-feedback">
+      Looks good!
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <label for="validationCustom04" class="form-label">Please select a room to join</label>
+    <select class="form-select" id="validationCustom04" name="roomname" required>
+      <option selected disabled value="">Choose...</option>
+      <option>Form1</option>
+      <option>Form2</option>
+      <option>Form3</option>
+    </select>
+    <div class="invalid-feedback">
+        Looks good!
+    </div>
+  </div>
+ 
+ 
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Submit form</button>
+  </div>
+</form>
+
+
+
+
+
 
     
-
-
-    <p>
-      <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Broadcast Messages</a>
-      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Multicast Messages</button>
-      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3">Unicast Messages</button>
-      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2 multiCollapseExample3">Hide all</button>
-    </p>
-    <div class="row">
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample1">
-          <div class="card card-body" id="broadcastcontainer">
-            broadcast content
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample2">
-          <div class="card card-body">
-           multicast content
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample3">
-          <div class="card card-body">
-            unicast content
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- <script>
+      function indexformsubmit(){
+        console.log("Here")
+        const username = document.getElementById('validationCustom01').value
+        const roomname = document.getElementById('validationCustom04').value
+        const indexform = document.getElementById('index-form').action=`chat.html?name=${username}&room=${roomname}`
+        indexform.submit()
+      } -->
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    -->
+    <!-- //  const indexform = document.getElementById('index-form')
+    //  indexform.addEventListener('submit',(e)=>{
+    //     e.preventDefault();
+    //     const username = document.getElementById('validationCustom01').value
+    //     console.log(username)
+    //     const roomname = document.getElementById('validationCustom04').value
+    //     console.log(roomname)
+    //     indexform.action=`chat.html?name=${username}&room=${roomname}`
+    //     console.log("Hello")
+    //     indexform.submit()
+    //   }) -->
+  <!-- </script> -->
+
   </body>
 </html>

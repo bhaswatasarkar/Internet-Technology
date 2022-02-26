@@ -7,13 +7,13 @@ const io = require('socket.io')(8000, {
 const users = {}
 
 io.on('connection',socket=>{
-    socket.on('new-user-joined',nameuser=>{
-        users[socket.id] = nameuser
-        socket.broadcast.emit('user-joined',nameuser);
+    socket.on('new-user-joined',({username,roomname})=>{
+        users[socket.id] = {username,roomname}
+        socket.broadcast.emit('user-joined',username);
     });
     
     socket.on('send',message=>{
-        socket.broadcast.emit('receive',{nameuser: users[socket.id],message: message})
+        socket.broadcast.emit('receive',{user: users[socket.id],message: message})
     });
 
 });
