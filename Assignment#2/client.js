@@ -4,11 +4,18 @@ const {username, roomname} = Qs.parse(location.search,{//username and the room f
     ignoreQueryPrefix: true
 });
 
-const form = document.getElementById('send-container')//form to collect data for sending message
+
+const messageInput = document.getElementById('messageInp')//message send
+
+//broadcast variables
+const form = document.getElementById('send-container')
 const broadcastbutton = document.querySelector('#broadcastbutton')
-const messageInput = document.getElementById('messageInp')
 const broadcastoutput = document.querySelector('#broadcastcontainer')
- 
+
+//multicast variables
+const formmulticast = document.getElementById('sender-form-multicast')
+const multicastbutton = document.querySelector('#multicastbutton')
+const multicastoutput = document.querySelector('#multicastcontainer')
 
 const appendelement = (message,messageclassdesign,castingtype)=>{
     const newelement = document.createElement('div')
@@ -16,6 +23,13 @@ const appendelement = (message,messageclassdesign,castingtype)=>{
     newelement.classList.add(messageclassdesign)
     if(castingtype=='broadcast')
         broadcastoutput.append(newelement)
+    else if(castingtype=='multicast'){
+        multicastoutput.append(newelement)
+    }
+    else if(castingtype=='unicast'){
+        unicastoutput.append(newelement)
+    }
+    
 }
 
 // const username = prompt("Enter your name to join")
@@ -29,7 +43,15 @@ form.addEventListener('submit',(e)=>{
     e.preventDefault();
     const message = messageInput.value
     appendelement(`You: ${message}`,'right','broadcast')
-    socket.emit('send',message)
+    socket.emit('sendbroadcast',message)
+    messageInput.value=''
+})
+
+formmulticast.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    const message = messageInput.value
+    appendelement(`You: ${message}`,'right','multicast')
+    socket.emit('sendmulticast',message)
     messageInput.value=''
 })
 
@@ -37,4 +59,8 @@ form.addEventListener('submit',(e)=>{
 
 socket.on('receive',data=>{
     appendelement(`${data.user.username}: ${data.message}`,'left','broadcast')
+})
+
+socket.on('receivemulticast',data=>{
+    appendelement(`${data.user.username}: ${data.message}`,'left','multicast')
 })
