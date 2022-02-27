@@ -20,13 +20,25 @@
         <div class="container-fluid">
           <form class="d-flex" id="send-container">
             <input class="form-control me-2" type="text" aria-label="Send" id="messageInp">
+            <input type="file" accept=".png, .jpg, .jpeg" id="imageInp">      
             <button class="btn btn-outline-success" type="submit" id="broadcastbutton">Send Broadcast</button>
           </form>
         </div>
     </nav>
     
+
+
     <div><form id="sender-form-multicast"><button class="btn btn-outline-success" type="submit" id="multicastcastbutton">Send to room(Multicast)</button></form></div>
+
+    <div>
+      <form id="sender-form-unicast">
+        <input class="form-control me-2" type="text" aria-label="Send" id="nametosendunicast">
+        <button class="btn btn-outline-success" type="submit" id="unicastbutton">Send to person(Unicast)</button>
+      </form>
+      </div>
     <br>
+    
+
 
     <p>
       <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Broadcast Messages</a>
@@ -38,21 +50,18 @@
       <div class="col">
         <div class="collapse multi-collapse" id="multiCollapseExample1">
           <div class="card card-body" id="broadcastcontainer">
-            broadcast content
           </div>
         </div>
       </div>
       <div class="col">
         <div class="collapse multi-collapse" id="multiCollapseExample2">
           <div class="card card-body" id="multicastcontainer">
-           multicast content
           </div>
         </div>
       </div>
       <div class="col">
         <div class="collapse multi-collapse" id="multiCollapseExample3">
           <div class="card card-body" id="unicastcontainer">
-            unicast content
           </div>
         </div>
       </div>
