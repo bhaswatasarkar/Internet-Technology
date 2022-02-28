@@ -32,8 +32,7 @@ const appendelement = (message,messageclassdesign,castingtype)=>{
         broadcastoutput.append(newelement)
     else if(castingtype=='multicast'){
         multicastoutput.append(newelement)
-    }
-    
+    }  
 }
 
 
@@ -62,7 +61,41 @@ form.addEventListener('submit',(e)=>{
     appendelement(`You: ${message}`,'right','broadcast')
     socket.emit('sendbroadcast',message)
     messageInput.value=''
+
+    
+    const files = document.getElementById('imageInp').files[0]
+    if(files){
+        const fileReader = new FileReader();
+        const imgPreview = document.createElement('div');
+        //imgPreview.classList.add('right')
+        result = fileReader.readAsDataURL(files);
+        fileReader.addEventListener("load", function () {
+            imgPreview.style.display = "block";
+            imgPreview.innerHTML = '<img src="' + this.result + '" />';
+            console.log(this.result)
+            // const bytes = new Uint8Array(this.result);
+            // console.log(bytes)
+            // socket.emit('sendimagebroadcast', bytes);
+            //const base64 = this.result.replace(/.*base64,/, '');
+
+            socket.emit('sendimagebroadcast', this.result);
+          }); 
+       broadcastoutput.append(imgPreview);
+    }
+    
+    // const files = document.getElementById('imageInp').files[0]
+    // if(files){
+    //     const fileReader = new FileReader();
+    //     result = fileReader.readAsDataURL(files);
+    //     const imgPreview = document.createElement('div')
+    //     fileReader.addEventListener("load", function () {
+    //         imgPreview.style.display = "block";
+    //         imgPreview.innerHTML = '<img src="' + this.result + '" />';
+    //     });
+    //     broadcastoutput.append(imgPreview);
+    // }
 })
+
 
 formmulticast.addEventListener('submit',(e)=>{
     e.preventDefault();
@@ -71,6 +104,7 @@ formmulticast.addEventListener('submit',(e)=>{
     socket.emit('sendmulticast',message)
     messageInput.value=''
 })
+
 
 formunicast.addEventListener('submit',(e)=>{
     e.preventDefault();
@@ -92,7 +126,6 @@ formunicast.addEventListener('submit',(e)=>{
             </div>
             </div>
         </div>`
-        console.log('here i am')
         unicastoutput.appendChild(newelement)
     }
     appendunicastelement(`You: ${message}`,'right',nametosend)
@@ -112,10 +145,7 @@ socket.on('receivemulticast',data=>{
 })
 
 socket.on('receiveunicast',data=>{
-    console.log('Here1')
     namefromreceived = data.user.username
-    console.log('Here2'+namefromreceived)
-
     const newelement = document.createElement('div')
     if(document.getElementById(`${namefromreceived}`)===null){
         newelement.innerHTML=`<p>
@@ -130,13 +160,17 @@ socket.on('receiveunicast',data=>{
             </div>
             </div>
         </div>`
-        console.log('Here3')
         unicastoutput.appendChild(newelement)
-        console.log('Here4')
     }
 
     appendunicastelement(`${data.user.username}: ${data.message}`,'left',namefromreceived)
+})
 
-    console.log('Here5')
 
+socket.on('receiveimagebroadcast', (image) => {
+    
+    const imgPreview = document.createElement('div');
+    imgPreview.style.display = "block";
+    imgPreview.innerHTML = '<img src="' + image + '" />';
+    broadcastoutput.append(imgPreview)
 })

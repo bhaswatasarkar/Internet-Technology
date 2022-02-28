@@ -39,4 +39,10 @@ io.on('connection',socket=>{
         io.to(socket_id_receiver).emit('receiveunicast',{user: users[socket.id],message: message})
     })
 
+    socket.on('sendimagebroadcast',(image)=>{
+      let f = "hello"
+      socket.broadcast.emit('receiveimagebroadcast',image)
+      console.log("Server here")
+    })
+
 });
