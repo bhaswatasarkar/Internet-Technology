@@ -1,29 +1,75 @@
 .left{
-    position: left;
-    margin-left: 20px;
+
+    margin-left: 5px;
     margin-bottom: 10px;
     padding: 10px;
     background-color: #fda8da;
-    width: 200px;
+    width: 260px;
     height: 50px;
     text-align: left;
     font: 400 .9em 'Open Sans', sans-serif;
     border: 1px solid #e397ba;
     border-radius: 10px;
-    float: left;
+    
 }
 
 .right{
-    position: right;
-    margin-left: 20px;
+    margin-left: 195px;
     margin-bottom: 10px;
     padding: 10px;
     background-color: #A8DDFD;
-    width: 200px;
+    width: 260px;
     height: 50px;
     text-align: right;
     font: 400 .9em 'Open Sans', sans-serif;
     border: 1px solid #97C6E3;
     border-radius: 10px;
-    float: right;
+    color: #393985;
+
 }
+
+.middle{
+    padding: 10px;
+    background-color: #74c99a;
+    width: 200px;
+    text-align: center;
+    font: 400 .9em 'Open Sans', sans-serif;
+    border: 1px solid #97C6E3;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    color: #2b2a2aea;
+}
+
+.image-message {
+    width: 250px;
+    height: 200px;
+    padding-bottom: 10px;
+    margin-left: 100px;
+    margin-right: auto;
+}
+
+#nametosendunicast{
+    width: 250px;
+}
+
+#sender-form-unicast{
+    padding-top: 20px;
+}
+
+#imageInp{
+    padding: 20px;
+}
+
+#broadcast-sender-container{
+    width: 50%;
+    margin-bottom: 10px;
+    
+}
+
+body{
+    background-image: url('background.jpg');
+}
+

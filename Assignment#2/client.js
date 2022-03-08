@@ -43,6 +43,8 @@ const appendunicastelement = (message,messageclassdesign,username)=>{
     newelement.innerText = message
     newelement.classList.add(messageclassdesign)
     unicastnewuser.append(newelement)
+
+    return unicastnewuser;
 }
 
 
@@ -50,7 +52,16 @@ const appendunicastelement = (message,messageclassdesign,username)=>{
 socket.emit('new-user-joined',({username,roomname}))
 
 socket.on('user-joined',username=>{
-    appendelement(`${username} joined the chat`,'left','broadcast')
+    appendelement(`${username} joined the chat`,'middle','broadcast')
+})
+
+socket.on('user-joined-room',username=>{
+    appendelement(`${username} joined the chat`,'middle','multicast')
+})
+
+socket.on('left',(left_username)=>{
+    appendelement(`${left_username} left the chat`,'middle','broadcast')
+    appendelement(`${left_username} left the chat`,'middle','multicast')
 })
 
 
@@ -71,29 +82,15 @@ form.addEventListener('submit',(e)=>{
         result = fileReader.readAsDataURL(files);
         fileReader.addEventListener("load", function () {
             imgPreview.style.display = "block";
-            imgPreview.innerHTML = '<img src="' + this.result + '" />';
-            console.log(this.result)
-            // const bytes = new Uint8Array(this.result);
-            // console.log(bytes)
-            // socket.emit('sendimagebroadcast', bytes);
-            //const base64 = this.result.replace(/.*base64,/, '');
+            imgPreview.innerHTML = '<img src="' + this.result + '"class = "image-message" />';
 
             socket.emit('sendimagebroadcast', this.result);
           }); 
        broadcastoutput.append(imgPreview);
     }
+
+    document.getElementById('imageInp').value=''
     
-    // const files = document.getElementById('imageInp').files[0]
-    // if(files){
-    //     const fileReader = new FileReader();
-    //     result = fileReader.readAsDataURL(files);
-    //     const imgPreview = document.createElement('div')
-    //     fileReader.addEventListener("load", function () {
-    //         imgPreview.style.display = "block";
-    //         imgPreview.innerHTML = '<img src="' + this.result + '" />';
-    //     });
-    //     broadcastoutput.append(imgPreview);
-    // }
 })
 
 
@@ -103,6 +100,23 @@ formmulticast.addEventListener('submit',(e)=>{
     appendelement(`You: ${message}`,'right','multicast')
     socket.emit('sendmulticast',message)
     messageInput.value=''
+
+    const files = document.getElementById('imageInp').files[0]
+    if(files){
+        const fileReader = new FileReader();
+        const imgPreview = document.createElement('div');
+        result = fileReader.readAsDataURL(files);
+        fileReader.addEventListener("load", function () {
+            imgPreview.style.display = "block";
+            imgPreview.innerHTML = '<img src="' + this.result + '"class = "image-message" />';
+            socket.emit('sendimagemulticast', this.result);
+          }); 
+      multicastoutput.append(imgPreview);
+    }
+
+    document.getElementById('imageInp').value=''
+    
+    
 })
 
 
@@ -122,15 +136,33 @@ formunicast.addEventListener('submit',(e)=>{
         <div style="min-height: 120px;">
             <div class="collapse collapse-horizontal" id="collapseWidthExample">
             <div class="card card-body" style="width: 300px;" id="${nametosend}">
-                This is some placeholder content for a horizontal collapse. It's hidden by default and shown when triggered.
             </div>
             </div>
         </div>`
         unicastoutput.appendChild(newelement)
     }
-    appendunicastelement(`You: ${message}`,'right',nametosend)
+    output_temp = appendunicastelement(`You: ${message}`,'right',nametosend)
     socket.emit('sendunicast',{message,nametosend})
     messageInput.value=''
+
+    const files = document.getElementById('imageInp').files[0]
+    if(files){
+        const fileReader = new FileReader();
+        const imgPreview = document.createElement('div');
+        result = fileReader.readAsDataURL(files);
+        
+        fileReader.addEventListener("load", function () {
+            imgPreview.style.display = "block";
+            image = this.result
+            imgPreview.innerHTML = '<img src="' + image + '"class = "image-message" />';
+            socket.emit('sendimageunicast', {image,nametosend});
+          }); 
+          output_temp.append(imgPreview);
+    }
+
+    document.getElementById('imageInp').value=''
+    
+
 })
 
 
@@ -156,7 +188,6 @@ socket.on('receiveunicast',data=>{
         <div style="min-height: 120px;">
             <div class="collapse collapse-horizontal" id="collapseWidthExample">
             <div class="card card-body" style="width: 300px;" id="${namefromreceived}">
-                This is some placeholder content for a horizontal collapse. It's hidden by default and shown when triggered.
             </div>
             </div>
         </div>`
@@ -171,6 +202,23 @@ socket.on('receiveimagebroadcast', (image) => {
     
     const imgPreview = document.createElement('div');
     imgPreview.style.display = "block";
-    imgPreview.innerHTML = '<img src="' + image + '" />';
+    imgPreview.innerHTML = '<img src="' + image + '"class = "image-message" />';
     broadcastoutput.append(imgPreview)
 })
+
+socket.on('receiveimagemulticast', (image) => {
+    
+    const imgPreview = document.createElement('div');
+    imgPreview.style.display = "block";
+    imgPreview.innerHTML = '<img src="' + image + '"class = "image-message" />';
+    multicastoutput.append(imgPreview)
+})
+
+socket.on('receiveimageunicast', data => {
+    const imgPreview = document.createElement('div');
+    imgPreview.style.display = "block";
+    imgPreview.innerHTML = '<img src="' + data.base64 + '"class = "image-message" />';
+    const output_temp = document.getElementById(`${data.user.username}`)
+    output_temp.append(imgPreview)
+})
+
