@@ -222,3 +222,20 @@ socket.on('receiveimageunicast', data => {
     output_temp.append(imgPreview)
 })
 
+
+
+
+socket.on('old-broadcast-messages-recover',data=>{
+    console.log('here')
+    console.log(data);
+    for(i=0;i<data.length;i++){
+        if(data[i].user.username==username)
+            appendelement(`You: ${data[i].message}`,'right','broadcast')
+            
+        else
+        {
+            appendelement(`${data[i].user.username}: ${data[i].message}`,'left','broadcast')
+        }
+    }
+})
+

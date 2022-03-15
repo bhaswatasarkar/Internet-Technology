@@ -5,6 +5,7 @@ const io = require('socket.io')(8000, {
   });
 
 const users = {}
+const broadcastmessagedatabase = new Array();
 
 
 io.on('connection',socket=>{
@@ -14,6 +15,10 @@ io.on('connection',socket=>{
         socket.join(roomname)
         socket.broadcast.emit('user-joined',username);
         socket.broadcast.to(roomname).emit('user-joined-room',username)
+
+        
+        io.to(socket.id).emit('old-broadcast-messages-recover',broadcastmessagedatabase);
+
     });
 
     socket.on('disconnect', ()=>{
@@ -21,10 +26,15 @@ io.on('connection',socket=>{
     });
 
     socket.on('sendbroadcast',message=>{
+ 
+        
+        broadcastmessagedatabase.push({user:users[socket.id],message:message});
+        
         socket.broadcast.emit('receive',{user: users[socket.id],message: message})
     });
 
     socket.on('sendmulticast',message=>{
+      
       socket.broadcast.to(users[socket.id].roomname).emit('receivemulticast',{user: users[socket.id],message: message})
     });
 
@@ -43,7 +53,6 @@ io.on('connection',socket=>{
     
     socket.on('sendunicast',({message,nametosend})=>{
         let socket_id_receiver = returnkey(nametosend)
-        console.log(nametosend)
         io.to(socket_id_receiver).emit('receiveunicast',{user: users[socket.id],message: message})
     })
 

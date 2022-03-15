@@ -6,6 +6,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\apache-tomcat-9.0.59-windows-x64\apache-tomcat-9.0.59\webapps\Coffee"/>
 			<item value="C:\Users\USER\Desktop\GFG"/>
 			<item value="C:\Users\USER\Desktop\internet tech assignment 1\New folder\a1"/>
 		</list>
