@@ -7,6 +7,8 @@ const io = require('socket.io')(8000, {
 const users = {}
 const broadcastmessagedatabase = new Array();
 
+const multicastmessagedatabaseroom1 = new Array();
+
 
 io.on('connection',socket=>{
 
@@ -17,7 +19,17 @@ io.on('connection',socket=>{
         socket.broadcast.to(roomname).emit('user-joined-room',username)
 
         
+        // for(let i=0;i<broadcastmessagedatabase.length;i++){
+        //   if(broadcastmessagedatabase[i].user.roomname==roomname)
+        //     multicastmessagedatabase.push({user:broadcastmessagedatabase[i].user,message:broadcastmessagedatabase[i].message})
+        // }
+        // console.log(multicastmessagedatabase)
+        // io.to(socket.id).emit('old-multicast-messages-recover',multicastmessagedatabase);
         io.to(socket.id).emit('old-broadcast-messages-recover',broadcastmessagedatabase);
+        if(roomname='Room1'){
+          console.log(multicastmessagedatabaseroom1)
+          io.to(socket.id).emit('old-multicast-messages-recover',multicastmessagedatabaseroom1);
+        }
 
     });
 
@@ -34,8 +46,14 @@ io.on('connection',socket=>{
     });
 
     socket.on('sendmulticast',message=>{
-      
+
+
       socket.broadcast.to(users[socket.id].roomname).emit('receivemulticast',{user: users[socket.id],message: message})
+
+      if(users[socket.id].roomname=='Room1'){
+        multicastmessagedatabaseroom1.push({user:users[socket.id],message:message})
+        console.log(multicastmessagedatabaseroom1)
+      }
     });
 
      

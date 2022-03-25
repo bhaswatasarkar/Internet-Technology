@@ -226,8 +226,6 @@ socket.on('receiveimageunicast', data => {
 
 
 socket.on('old-broadcast-messages-recover',data=>{
-    console.log('here')
-    console.log(data);
     for(i=0;i<data.length;i++){
         if(data[i].user.username==username)
             appendelement(`You: ${data[i].message}`,'right','broadcast')
@@ -238,4 +236,18 @@ socket.on('old-broadcast-messages-recover',data=>{
         }
     }
 })
+
+socket.on('old-multicast-messages-recover',data=>{
+    for(i=0;i<data.length;i++){
+        if(data[i].user.username==username)
+            appendelement(`You: ${data[i].message}`,'right','multicast')
+            
+        else
+        {
+            appendelement(`${data[i].user.username}: ${data[i].message}`,'left','multicast')
+        }
+    }
+})
+
+
 
