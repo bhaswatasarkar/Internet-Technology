@@ -6,6 +6,9 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\USER\eclipse-workspace\Test"/>
+			<item value="C:\Users\USER\eclipse-workspace\Internet Technology Assignment\travelthruair"/>
+			<item value="C:\Users\USER\eclipse-workspace\Internet Technology Assignment\Travel-Thru-Air-main"/>
 			<item value="C:\apache-tomcat-9.0.59-windows-x64\apache-tomcat-9.0.59\webapps\Coffee"/>
 			<item value="C:\Users\USER\Desktop\GFG"/>
 			<item value="C:\Users\USER\Desktop\internet tech assignment 1\New folder\a1"/>
@@ -13,10 +16,16 @@
 	</section>
 	<section name="ChooseWorkspaceDialogSettings">
 		<item key="DIALOG_X_ORIGIN" value="499"/>
-		<item key="DIALOG_Y_ORIGIN" value="-106"/>
+		<item key="DIALOG_Y_ORIGIN" value="9"/>
 	</section>
 	<section name="WORKBENCH_SETTINGS">
 		<list key="ENABLED_TRANSFERS">
+		</list>
+	</section>
+	<section name="NewWizardAction">
+		<item key="NewWizardSelectionPage.STORE_SELECTED_ID" value="org.eclipse.jst.servlet.ui.project.facet.WebProjectWizard"/>
+		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.eclipse.wst.web.ui"/>
 		</list>
 	</section>
 </section>
