@@ -1,5 +1,4 @@
 package details.flight;
-import java.time.LocalDate;
 public class Flight {
 	
 	public Integer flightnumber;
@@ -13,7 +12,7 @@ public class Flight {
 	public String traveltime;//in minutes
 	public Integer offer;//(in %)
 	
-    public Flight(Integer flightnumber,String departureCity, String arrivalCity, String time, Integer legs, Integer cost, String traveltime) {
+    public Flight(Integer flightnumber,String departureCity, String arrivalCity, String time, Integer legs, Integer cost, String traveltime, Integer offer) {
         this.flightnumber=flightnumber;
     	this.departureCity = departureCity;
         this.arrivalCity = arrivalCity;
@@ -21,7 +20,7 @@ public class Flight {
         this.legs = legs;
         this.time=time;
         this.traveltime = traveltime;
-        this.offer=-1;
+        this.offer=offer;
 
     };
 
@@ -53,6 +52,9 @@ public class Flight {
     	return traveltime;
     }
     
+    public Integer getOffer() {
+    	return offer;
+    }
 
 
 	

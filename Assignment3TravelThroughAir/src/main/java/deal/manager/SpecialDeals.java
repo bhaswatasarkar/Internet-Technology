@@ -1,9 +1,31 @@
 package deal.manager;
 
 import java.sql.*;
+import java.util.*;
 import java.util.Scanner;
 
+import details.flight.Flight;
+
 public class SpecialDeals {
+	
+	ArrayList<Flight> al = new ArrayList<Flight>();
+	
+	public ArrayList<Flight> returnSpecialDeals(Connection con){
+		
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			ResultSet rs=stmt.executeQuery("SELECT * FROM allflights NATURAL JOIN offer;");
+			while(rs.next())  {
+			al.add(new Flight(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5),rs.getInt(6),rs.getString(7),rs.getInt(8)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return al;
+		
+	}
+	
 	public static void main(String[] args) {
 		String username=null,password=null;
 		int choice=-1;

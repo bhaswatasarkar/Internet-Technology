@@ -7,6 +7,6 @@
 <title>Something went wrong!</title>
 </head>
 <body>
-
+Something went wrong!
 </body>
 </html>

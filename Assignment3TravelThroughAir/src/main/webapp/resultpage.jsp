@@ -87,18 +87,13 @@
     %>
     
     </div>
-    
-    <div id="special-deal-listing">
     <div id="special-deal-listing">
     <%
-    		Connection con = (Connection)application.getAttribute("dbcon");
-    		Statement stmt=con.createStatement(); 
-			ResultSet rs=stmt.executeQuery("SELECT * FROM allflights NATURAL JOIN offer;"); 
-			out.println("Special offers!!!");
-			while(rs.next()) {
-				out.println("<br>");
-				out.println("From "+rs.getString(2)+" to "+rs.getString(3)+" FLAT "+rs.getInt(8)+"%OFF : Flight number "+rs.getInt(1)); 
-			}
+    out.println("Special offers!!!");
+    ArrayList<Flight> alspecial= (ArrayList<Flight>)application.getAttribute("spd");
+    for(Flight f : alspecial){
+    	out.println("Flight number : "+f.getFlightnum()+" Offer : "+f.getOffer());
+    }
 	%>
     </div>
     </body>
