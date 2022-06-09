@@ -90,9 +90,11 @@
     <div id="special-deal-listing">
     <%
     out.println("Special offers!!!");
+    out.println("<br>");
     ArrayList<Flight> alspecial= (ArrayList<Flight>)application.getAttribute("spd");
     for(Flight f : alspecial){
-    	out.println("Flight number : "+f.getFlightnum()+" Offer : "+f.getOffer());
+    	out.println("Flight number : "+f.getFlightnum()+" Offer : "+f.getOffer()+"%");
+    	out.println("<br>");
     }
 	%>
     </div>

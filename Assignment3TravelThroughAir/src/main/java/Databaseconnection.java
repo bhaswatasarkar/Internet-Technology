@@ -1,4 +1,5 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
@@ -19,27 +20,29 @@ public class Databaseconnection implements ServletContextListener {
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
-    public void contextDestroyed(ServletContextEvent sce)  { 
+    @Override
+	public void contextDestroyed(ServletContextEvent sce)  {
 
     }
 
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
-	
-    public void contextInitialized(ServletContextEvent sce) { 
+
+    @Override
+	public void contextInitialized(ServletContextEvent sce) {
          ServletContext sc = sce.getServletContext();
          String url = sc.getInitParameter("dbaddress");
          String driver = sc.getInitParameter("dbdriver");
          String username = sc.getInitParameter("username");
          String password = sc.getInitParameter("password");
-         
+
          try {
-	         Class.forName(driver);  
+	         Class.forName(driver);
 			 Connection con=DriverManager.getConnection(url,username,password);
 			 sc.setAttribute("dbcon", con);
-			 
-			 
+
+
 			 SpecialDeals sd = new SpecialDeals();
 			 ArrayList<Flight> al = sd.returnSpecialDeals(con);
 			 System.out.println(al);
@@ -48,9 +51,9 @@ public class Databaseconnection implements ServletContextListener {
          catch (Exception e) {
 			e.printStackTrace();
 		}
-			 
-			
-         
+
+
+
     }
-	
+
 }

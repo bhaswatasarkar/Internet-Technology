@@ -27,7 +27,6 @@ io.on('connection',socket=>{
         // io.to(socket.id).emit('old-multicast-messages-recover',multicastmessagedatabase);
         io.to(socket.id).emit('old-broadcast-messages-recover',broadcastmessagedatabase);
         if(roomname='Room1'){
-          console.log(multicastmessagedatabaseroom1)
           io.to(socket.id).emit('old-multicast-messages-recover',multicastmessagedatabaseroom1);
         }
 

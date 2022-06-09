@@ -1,6 +1,6 @@
 package details.flight;
 public class Flight {
-	
+
 	public Integer flightnumber;
 	public String departureCity;
 	public String arrivalCity;
@@ -8,10 +8,10 @@ public class Flight {
 //	public LocalDate departureDate;
 	public String time;
 	public Integer legs;
-	public Integer cost;	
+	public Integer cost;
 	public String traveltime;//in minutes
 	public Integer offer;//(in %)
-	
+
     public Flight(Integer flightnumber,String departureCity, String arrivalCity, String time, Integer legs, Integer cost, String traveltime, Integer offer) {
         this.flightnumber=flightnumber;
     	this.departureCity = departureCity;
@@ -22,12 +22,12 @@ public class Flight {
         this.traveltime = traveltime;
         this.offer=offer;
 
-    };
+    }
 
     public Integer getFlightnum() {
         return flightnumber;
     }
-    
+
     public String getDepartureCity() {
         return departureCity;
     }
@@ -39,23 +39,23 @@ public class Flight {
     public Integer getCost() {
         return cost;
     }
-   
+
     public Integer getLegs() {
     	return legs;
     }
-    
+
     public String getTime() {
     	return time;
     }
-    
+
     public String getTraveltime() {
     	return traveltime;
     }
-    
+
     public Integer getOffer() {
     	return offer;
     }
 
 
-	
+
 }

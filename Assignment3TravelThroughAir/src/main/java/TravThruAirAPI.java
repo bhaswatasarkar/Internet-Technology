@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import deal.manager.SpecialDeals;
 import details.flight.Flight;
 
 /**
@@ -21,7 +22,7 @@ public class TravThruAirAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
-     * Default constructor. 
+     * Default constructor.
      */
     public TravThruAirAPI() {
     }
@@ -29,16 +30,25 @@ public class TravThruAirAPI extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String arrivalCity = request.getParameter("arrivalCity");
 		String departureCity = request.getParameter("departureCity");
-		String departureDate = request.getParameter("departureDate");
+		//String departureDate = request.getParameter("departureDate");
 		ServletContext sc = getServletContext();
-		Flights fs = new Flights(arrivalCity,departureCity,departureDate,(Connection)sc.getAttribute("dbcon"));
+		Flights fs = new Flights(arrivalCity,departureCity,(Connection)sc.getAttribute("dbcon"));
+
 		ArrayList<Flight> flightDetails = fs.returnFlightDetails();
+		System.out.println(flightDetails);
 		request.setAttribute("flightDetails", flightDetails);
+		
+		 SpecialDeals sd = new SpecialDeals();
+		 ArrayList<Flight> al = sd.returnSpecialDeals((Connection)sc.getAttribute("dbcon"));
+//		 System.out.println(al);
+		 sc.setAttribute("spd", al);
+		 
 		RequestDispatcher rd = request.getRequestDispatcher("resultpage.jsp");
 		rd.forward(request, response);
 	}
@@ -46,6 +56,7 @@ public class TravThruAirAPI extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
